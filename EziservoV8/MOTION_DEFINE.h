@@ -297,13 +297,13 @@ typedef union
 
 #define MAX_AD_CHANNEL		16
 
-enum AD_RANGE
+typedef enum AD_RANGE
 {
 	ADRANGE_10_to_10 = 0,	//  -10V ~  +10V [2.441mV]
 	ADRANGE_5_to_5,			//   -5V ~   +5V [1.22mV]
 	ADRANGE_2_5_to_2_5,		// -2.5V ~ +2.5V [0.61mV]
 	ADRANGE_0_to_10,		//    0V ~  +10V [1.22mV]
-};
+} AD_RANGE;
 
 #pragma pack(1)
 

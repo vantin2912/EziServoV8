@@ -1,6 +1,7 @@
-#include <stdint.h>
+#include "FAS_Util.h"
+#include <string.h>
 
-const unsigned short TABLE_CRCVALUE[] =
+static const unsigned short TABLE_CRCVALUE[] =
 {
 0X0000, 0XC0C1, 0XC181, 0X0140, 0XC301, 0X03C0, 0X0280, 0XC241,
 0XC601, 0X06C0, 0X0780, 0XC741, 0X0500, 0XC5C1, 0XC481, 0X0440,
@@ -36,8 +37,74 @@ const unsigned short TABLE_CRCVALUE[] =
 0X8201, 0X42C0, 0X4380, 0X8341, 0X4100, 0X81C1, 0X8081, 0X4040
 };
 
-const char FAS_Header[] = {0xAA, 0xCC};
-const char FAS_Tail[] = {0xAA, 0xEE};
+static const char FAS_Header[] = { 0xAA, 0xCC };
+static const char FAS_Tail[] = { 0xAA, 0xEE };
+
+static uint8_t FAS_AddByteStuffing(uint8_t* Buffer, uint8_t* BufferLen)
+{
+    uint8_t Length = *BufferLen;
+    for (uint8_t i = 0; i < Length; ++i)
+    {
+        if (Buffer[i] == 0xAA)
+        {
+            memmove(Buffer + i + 1, Buffer + i, Length - i);
+            Buffer[i] = 0xAA;
+            i++;
+            Length++;
+        }
+    }
+    *BufferLen = Length;
+}
+
+static uint16_t FAS_CalcCRC(uint8_t* Data, uint8_t Len)
+{
+    unsigned char nTemp;
+    unsigned short wCRCWord = 0xFFFF;
+    while (Len--)
+    {
+        nTemp = wCRCWord ^ *(Data++);
+        wCRCWord >>= 8;
+        wCRCWord ^= TABLE_CRCVALUE[nTemp];
+    }
+    return wCRCWord;
+}
+
+static uint8_t FAS_GetSync()
+{
+    static uint8_t Sync = 0;
+    return Sync++;
+}
 
 
-uint8_t FAS_PackData(uint8_t SlaveID, uint8_t FrameType ,uint8_t* Data, uint8_t* Len, uint8_t* PackedData, uint8_t* PackedLen);
+uint8_t FAS_PackData(uint8_t SlaveID, uint8_t FrameType ,uint8_t* Data, uint8_t DataLen, uint8_t* PackedData, uint8_t* PackedLen)
+{
+    uint8_t _PackedLen = 0;
+    uint8_t Sync = FAS_GetSync();
+    /*  Add Slave ID*/
+    memcpy(PackedData + _PackedLen, &SlaveID, 1); 
+    _PackedLen +=1;
+    /*  Add Sync Byte*/
+    memcpy(PackedData + _PackedLen, &Sync, 1);
+    _PackedLen +=1;
+    /*  Add FrameType */
+    memcpy(PackedData + _PackedLen, &FrameType, 1);
+    _PackedLen +=1;
+    /*  Add Data*/
+    memcpy(PackedData+ _PackedLen, Data, DataLen);
+    _PackedLen += DataLen;
+    /* Add CRC */
+    uint16_t CRC = FAS_CalcCRC(PackedData, _PackedLen);
+    memcpy(PackedData + _PackedLen, &CRC, 2);
+    _PackedLen += 2;
+    FAS_AddByteStuffing(PackedData, &_PackedLen);
+    /* Add Header*/
+    memmove(PackedData + 2, PackedData, _PackedLen);
+    memcpy(PackedData, FAS_Header,2);
+    _PackedLen+=2;
+    /*  Add Tail*/
+    memcpy(PackedData + _PackedLen, FAS_Tail, 2);
+    _PackedLen +=2;
+    *PackedLen = _PackedLen;
+    return Sync;
+}
+
