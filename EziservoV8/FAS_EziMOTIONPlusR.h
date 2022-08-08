@@ -14,6 +14,7 @@
 	#include "ReturnCodes_Define.h"
 	#include "MOTION_DEFINE.h"
 	#include "COMM_Define.h"
+	#include <stdlib.h>
 #endif
 
 
