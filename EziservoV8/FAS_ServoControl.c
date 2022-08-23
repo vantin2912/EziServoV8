@@ -1,4 +1,4 @@
-#include "FAS_ServoControl.h"
+#include "FAS_EziMOTIONPlusR.h"
 #include <stdlib.h>
 int FAS_ServoEnable(uint8_t nPortNo, uint8_t iSlaveNo, uint8_t bOnOff)
 {

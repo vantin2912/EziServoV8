@@ -248,7 +248,7 @@ typedef enum
 
 static const char* ALARM_DESCRIPTION[MAX_ALARM_NUM] = 
 {
-	NULL,
+	0,
 	/*  1 */ "Over Current",
 	/*  2 */ "Over Speed",
 	/*  3 */ "Position Tracking",
@@ -261,7 +261,7 @@ static const char* ALARM_DESCRIPTION[MAX_ALARM_NUM] =
 	/* 10 */ "Inposition Error",
 	/* 11 */ "System Halt",
 	/* 12 */ "ROM Device Error",
-	/* 13 */ NULL,
+	/* 13 */ 0,
 	/* 14 */ "High Input Voltage",
 	/* 15 */ "Position Overflow",
 	/* 16 */ "Position Changed"
