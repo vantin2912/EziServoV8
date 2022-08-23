@@ -13,7 +13,7 @@ int FAS_ServoEnable(uint8_t nPortNo, uint8_t iSlaveNo, uint8_t bOnOff)
     free(SendBuffer);
 
 
-    FAS_Receive(nPortNo, RcvBuffer,RcvDataLen);
+    FAS_Receive(nPortNo, RcvBuffer,&RcvDataLen);
     return FMM_OK;
 }
 int FAS_ServoAlarmReset(uint8_t nPortNo, uint8_t iSlaveNo)
@@ -29,7 +29,7 @@ int FAS_ServoAlarmReset(uint8_t nPortNo, uint8_t iSlaveNo)
     free(SendBuffer);
 
 
-    FAS_Receive(nPortNo, RcvBuffer, RcvDataLen);
+    FAS_Receive(nPortNo, RcvBuffer, &RcvDataLen);
     return FMM_OK;
 }
 int FAS_StepAlarmReset(uint8_t nPortNo, uint8_t iSlaveNo, uint8_t bReset)

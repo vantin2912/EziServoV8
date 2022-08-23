@@ -1,6 +1,5 @@
 #include "FAS_EziMOTIONPlusR.h"
 #include <string.h>
-
 int FAS_MoveStop(uint8_t nPortNo, uint8_t iSlaveNo)
 {
     const uint8_t FrameType = 0x31;
@@ -14,7 +13,7 @@ int FAS_MoveStop(uint8_t nPortNo, uint8_t iSlaveNo)
     free(SendBuffer);
 
 
-    FAS_Receive(nPortNo, RcvBuffer, RcvDataLen);
+    FAS_Receive(nPortNo, RcvBuffer, &RcvDataLen);
     return FMM_OK;
 }
 int FAS_EmergencyStop(uint8_t nPortNo, uint8_t iSlaveNo)
@@ -30,7 +29,7 @@ int FAS_EmergencyStop(uint8_t nPortNo, uint8_t iSlaveNo)
     free(SendBuffer);
 
 
-    FAS_Receive(nPortNo, RcvBuffer, RcvDataLen);
+    FAS_Receive(nPortNo, RcvBuffer, &RcvDataLen);
     return FMM_OK;
 }
 
@@ -47,7 +46,7 @@ int FAS_MovePause(uint8_t nPortNo, uint8_t iSlaveNo, uint8_t bPause)
     free(SendBuffer);
 
 
-    FAS_Receive(nPortNo, RcvBuffer, RcvDataLen);
+    FAS_Receive(nPortNo, RcvBuffer, &RcvDataLen);
     return FMM_OK;
 }
 
@@ -64,7 +63,7 @@ int FAS_MoveOriginSingleAxis(uint8_t nPortNo, uint8_t iSlaveNo)
     free(SendBuffer);
 
 
-    FAS_Receive(nPortNo, RcvBuffer, RcvDataLen);
+    FAS_Receive(nPortNo, RcvBuffer, &RcvDataLen);
     return FMM_OK;
 }
 int FAS_MoveSingleAxisAbsPos(uint8_t nPortNo, uint8_t iSlaveNo, int32_t lAbsPos, uint32_t lVelocity)
@@ -84,7 +83,7 @@ int FAS_MoveSingleAxisAbsPos(uint8_t nPortNo, uint8_t iSlaveNo, int32_t lAbsPos,
     free(SendBuffer);
 
 
-    FAS_Receive(nPortNo, RcvBuffer, RcvDataLen);
+    FAS_Receive(nPortNo, RcvBuffer, &RcvDataLen);
     return FMM_OK;
 }
 int FAS_MoveSingleAxisIncPos(uint8_t nPortNo, uint8_t iSlaveNo, int32_t lIncPos, uint32_t lVelocity)
@@ -104,7 +103,7 @@ int FAS_MoveSingleAxisIncPos(uint8_t nPortNo, uint8_t iSlaveNo, int32_t lIncPos,
     free(SendBuffer);
 
 
-    FAS_Receive(nPortNo, RcvBuffer, RcvDataLen);
+    FAS_Receive(nPortNo, RcvBuffer, &RcvDataLen);
     return FMM_OK;
 }
 int FAS_MoveToLimit(uint8_t nPortNo, uint8_t iSlaveNo, uint32_t lVelocity, int iLimitDir)
@@ -124,7 +123,7 @@ int FAS_MoveToLimit(uint8_t nPortNo, uint8_t iSlaveNo, uint32_t lVelocity, int i
     free(SendBuffer);
 
 
-    FAS_Receive(nPortNo, RcvBuffer, RcvDataLen);
+    FAS_Receive(nPortNo, RcvBuffer, &RcvDataLen);
     return FMM_OK;
 }
 int FAS_MoveVelocity(uint8_t nPortNo, uint8_t iSlaveNo, uint32_t lVelocity, int iVelDir)
@@ -144,7 +143,7 @@ int FAS_MoveVelocity(uint8_t nPortNo, uint8_t iSlaveNo, uint32_t lVelocity, int 
     free(SendBuffer);
 
 
-    FAS_Receive(nPortNo, RcvBuffer, RcvDataLen);
+    FAS_Receive(nPortNo, RcvBuffer, &RcvDataLen);
     return FMM_OK;
 }
 int FAS_PositionAbsOverride(uint8_t nPortNo, uint8_t iSlaveNo, int32_t lOverridePos)
@@ -163,7 +162,7 @@ int FAS_PositionAbsOverride(uint8_t nPortNo, uint8_t iSlaveNo, int32_t lOverride
     free(SendBuffer);
 
 
-    FAS_Receive(nPortNo, RcvBuffer, RcvDataLen);
+    FAS_Receive(nPortNo, RcvBuffer, &RcvDataLen);
     return FMM_OK;
 }
 int FAS_PositionIncOverride(uint8_t nPortNo, uint8_t iSlaveNo, int32_t lOverridePos)
@@ -182,7 +181,7 @@ int FAS_PositionIncOverride(uint8_t nPortNo, uint8_t iSlaveNo, int32_t lOverride
     free(SendBuffer);
 
 
-    FAS_Receive(nPortNo, RcvBuffer, RcvDataLen);
+    FAS_Receive(nPortNo, RcvBuffer, &RcvDataLen);
     return FMM_OK;
 }
 int FAS_VelocityOverride(uint8_t nPortNo, uint8_t iSlaveNo, uint32_t lVelocity)
@@ -201,7 +200,7 @@ int FAS_VelocityOverride(uint8_t nPortNo, uint8_t iSlaveNo, uint32_t lVelocity)
     free(SendBuffer);
 
 
-    FAS_Receive(nPortNo, RcvBuffer, RcvDataLen);
+    FAS_Receive(nPortNo, RcvBuffer, &RcvDataLen);
     return FMM_OK;
 }
 
@@ -242,7 +241,7 @@ int FAS_MoveSingleAxisAbsPosEx(uint8_t nPortNo, uint8_t iSlaveNo, int32_t lAbsPo
     free(SendBuffer);
 
 
-    FAS_Receive(nPortNo, RcvBuffer, RcvDataLen);
+    FAS_Receive(nPortNo, RcvBuffer, &RcvDataLen);
     return FMM_OK;
 }
 int FAS_MoveSingleAxisIncPosEx(uint8_t nPortNo, uint8_t iSlaveNo, int32_t lIncPos, uint32_t lVelocity, MOTION_OPTION_EX* lpExOption)
@@ -263,7 +262,7 @@ int FAS_MoveSingleAxisIncPosEx(uint8_t nPortNo, uint8_t iSlaveNo, int32_t lIncPo
     free(SendBuffer);
 
 
-    FAS_Receive(nPortNo, RcvBuffer, RcvDataLen);
+    FAS_Receive(nPortNo, RcvBuffer, &RcvDataLen);
     return FMM_OK;
 }
 int FAS_MoveVelocityEx(uint8_t nPortNo, uint8_t iSlaveNo, uint32_t lVelocity, int iVelDir, VELOCITY_OPTION_EX* lpExOption)
@@ -284,6 +283,6 @@ int FAS_MoveVelocityEx(uint8_t nPortNo, uint8_t iSlaveNo, uint32_t lVelocity, in
     free(SendBuffer);
 
 
-    FAS_Receive(nPortNo, RcvBuffer, RcvDataLen);
+    FAS_Receive(nPortNo, RcvBuffer, &RcvDataLen);
     return FMM_OK;
 }
