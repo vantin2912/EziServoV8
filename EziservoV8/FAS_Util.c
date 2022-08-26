@@ -1,6 +1,7 @@
 #include "FAS_Util.h"
+#include "ReturnCodes_Define.h"
 #include <string.h>
-
+#include <stdlib.h>
 static const unsigned short TABLE_CRCVALUE[] =
 {
 0X0000, 0XC0C1, 0XC181, 0X0140, 0XC301, 0X03C0, 0X0280, 0XC241,
@@ -39,8 +40,7 @@ static const unsigned short TABLE_CRCVALUE[] =
 
 static const char FAS_Header[] = { 0xAA, 0xCC };
 static const char FAS_Tail[] = { 0xAA, 0xEE };
-
-static uint8_t FAS_AddByteStuffing(uint8_t* Buffer, uint8_t* BufferLen)
+static void FAS_AddByteStuffing(uint8_t* Buffer, uint8_t* BufferLen)
 {
     uint8_t Length = *BufferLen;
     for (uint8_t i = 0; i < Length; ++i)
@@ -54,6 +54,37 @@ static uint8_t FAS_AddByteStuffing(uint8_t* Buffer, uint8_t* BufferLen)
         }
     }
     *BufferLen = Length;
+}
+
+static uint8_t FAS_UnStuffingByte(uint8_t* Buffer, uint8_t* BufferLen)
+{
+	uint8_t _BufferLen = *BufferLen;
+	uint8_t* UnStuffBuffer = (uint8_t*)calloc(_BufferLen, 1);
+	uint8_t UnStuffBufferLen = 0;
+	for(uint8_t i = 0; i < _BufferLen; ++i)
+	{
+		if(Buffer[i] == 0xAA && Buffer[i+1] == 0xAA)
+		{
+			UnStuffBuffer[UnStuffBufferLen] = Buffer[i];
+			i++;
+			UnStuffBufferLen++;
+		}
+		else if(Buffer[i] == 0xAa && Buffer[i+1] != 0xAA)
+		{
+			free(UnStuffBuffer);
+			return FMP_PACKETERROR;
+		}
+		else
+		{
+			UnStuffBuffer[UnStuffBufferLen] = Buffer[i];
+			UnStuffBufferLen++;
+		}
+	}
+	memcpy(Buffer, UnStuffBuffer, UnStuffBufferLen);
+	*BufferLen = UnStuffBufferLen;
+	free(UnStuffBuffer);
+	return FMM_OK;
+
 }
 
 static uint16_t FAS_CalcCRC(uint8_t* Data, uint8_t Len)
@@ -106,5 +137,38 @@ uint8_t FAS_PackData(uint8_t SlaveID, uint8_t FrameType ,uint8_t* Data, uint8_t 
     _PackedLen +=2;
     *PackedLen = _PackedLen;
     return Sync;
+}
+
+uint8_t FAS_UnPackData(uint8_t* Buffer, uint8_t BufferLen, uint8_t SlaveID, uint8_t Sync, uint8_t FrameType, uint8_t* Data, uint8_t* DataLen)
+{
+	uint8_t _DataLen = BufferLen;
+	uint8_t Status;
+	uint16_t FasCRC;
+	Status = memcmp(Buffer,FAS_Header, 2);
+	if(Status != 0) return FMP_PACKETERROR;
+	Status = memcmp(Buffer+_DataLen - 2, FAS_Tail,2);
+	if(Status != 0) return FMP_PACKETERROR;
+	memcpy(Data, Buffer+2, _DataLen - 4);
+	_DataLen -= 4;
+
+	Status = FAS_UnStuffingByte(Data, &_DataLen);
+	if(Status != FMM_OK)
+		return Status;
+	FasCRC = FAS_CalcCRC(Data, _DataLen - 2);
+	Status = memcmp(&FasCRC, Data + _DataLen - 2, 2);
+	if(Status != 0) return FMC_CRCFAILED_ERROR;
+
+	if(Data[0] != SlaveID)
+		return FMP_PACKETERROR;
+
+	if(Data[1] != Sync)
+		return 0xAA;
+
+	if(Data[2] != FrameType)
+		return FMP_PACKETERROR;
+	_DataLen -=5;
+	*DataLen = _DataLen;
+	memcpy(Data, Data+3, _DataLen);
+	return Data[0];
 }
 

@@ -3,9 +3,9 @@
 
 int FAS_GetAxisStatus(uint8_t nPortNo, uint8_t iSlaveNo, uint32_t* dwAxisStatus)
 {
-    const uint8_t FrameType = 0x2A;
-    const uint8_t SendDataLen = 1;
-    const uint8_t RcvDataLen = 1;
+    const uint8_t FrameType = 0x40;
+    const uint8_t SendDataLen = 0;
+    const uint8_t RcvDataLen = 5;
     uint8_t *SendBuffer = (uint8_t*) calloc(15 + SendDataLen, 1);
     uint8_t SendLen;
     uint8_t *RcvBuffer = (uint8_t*)calloc(15 + SendDataLen, 1);

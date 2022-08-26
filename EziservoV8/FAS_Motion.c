@@ -5,32 +5,69 @@ int FAS_MoveStop(uint8_t nPortNo, uint8_t iSlaveNo)
     const uint8_t FrameType = 0x31;
     const uint8_t SendDataLen = 0;
     const uint8_t RcvDataLen = 1;
+    uint8_t ComStatus;
     uint8_t* SendBuffer = (uint8_t*)calloc(15 + SendDataLen, 1);
     uint8_t SendLen;
-    uint8_t* RcvBuffer = (uint8_t*)calloc(15 + SendDataLen, 1);
+    uint8_t* RcvBuffer = (uint8_t*)calloc(15 + RcvDataLen, 1);
+    uint8_t RcvLen;
+    uint8_t* RespData = (uint8_t*)calloc(RcvDataLen + 2, 1);
+	uint8_t RespDataLen;
+
     uint8_t SyncByte = FAS_PackData(iSlaveNo, FrameType, NULL, 0, SendBuffer, &SendLen);
     FAS_Send(nPortNo, SendBuffer, SendLen);
     free(SendBuffer);
 
 
-    FAS_Receive(nPortNo, RcvBuffer, &RcvDataLen);
-    return FMM_OK;
+    ComStatus = FAS_Receive(nPortNo, RcvBuffer,&RcvLen);
+	ComStatus = FAS_UnPackData(RcvBuffer, RcvLen, iSlaveNo, SyncByte, FrameType, RespData, &RespDataLen);
+	if(ComStatus != FMM_OK) return ComStatus;
+
+	if(RespDataLen != RcvDataLen)
+	{
+		free(RcvBuffer);
+		free(RespData);
+		return FMM_UNKNOWN_ERROR;
+	}
+
+	ComStatus = RespData[0];
+	free(RcvBuffer);
+	free(RespData);
+	return ComStatus;
 }
 int FAS_EmergencyStop(uint8_t nPortNo, uint8_t iSlaveNo)
 {
     const uint8_t FrameType = 0x32;
     const uint8_t SendDataLen = 0;
     const uint8_t RcvDataLen = 1;
+    uint8_t ComStatus;
+
     uint8_t* SendBuffer = (uint8_t*)calloc(15 + SendDataLen, 1);
     uint8_t SendLen;
-    uint8_t* RcvBuffer = (uint8_t*)calloc(15 + SendDataLen, 1);
+    uint8_t* RcvBuffer = (uint8_t*)calloc(15 + RcvDataLen, 1);
+    uint8_t RcvLen;
+    uint8_t* RespData = (uint8_t*)calloc(RcvDataLen + 2, 1);
+	uint8_t RespDataLen;
+
     uint8_t SyncByte = FAS_PackData(iSlaveNo, FrameType, NULL, 0, SendBuffer, &SendLen);
     FAS_Send(nPortNo, SendBuffer, SendLen);
     free(SendBuffer);
 
 
-    FAS_Receive(nPortNo, RcvBuffer, &RcvDataLen);
-    return FMM_OK;
+    ComStatus = FAS_Receive(nPortNo, RcvBuffer,&RcvLen);
+	ComStatus = FAS_UnPackData(RcvBuffer, RcvLen, iSlaveNo, SyncByte, FrameType, RespData, &RespDataLen);
+	if(ComStatus != FMM_OK) return ComStatus;
+
+	if(RespDataLen != RcvDataLen)
+	{
+		free(RcvBuffer);
+		free(RespData);
+		return FMM_UNKNOWN_ERROR;
+	}
+
+	ComStatus = RespData[0];
+	free(RcvBuffer);
+	free(RespData);
+	return ComStatus;
 }
 
 int FAS_MovePause(uint8_t nPortNo, uint8_t iSlaveNo, uint8_t bPause)
@@ -38,16 +75,35 @@ int FAS_MovePause(uint8_t nPortNo, uint8_t iSlaveNo, uint8_t bPause)
     const uint8_t FrameType = 0x33;
     const uint8_t SendDataLen = 1;
     const uint8_t RcvDataLen = 1;
+    uint8_t ComStatus;
+
     uint8_t* SendBuffer = (uint8_t*)calloc(15 + SendDataLen, 1);
     uint8_t SendLen;
-    uint8_t* RcvBuffer = (uint8_t*)calloc(15 + SendDataLen, 1);
+    uint8_t* RcvBuffer = (uint8_t*)calloc(15 + RcvDataLen, 1);
+    uint8_t RcvLen;
+    uint8_t* RespData = (uint8_t*)calloc(RcvDataLen + 2, 1);
+	uint8_t RespDataLen;
+
     uint8_t SyncByte = FAS_PackData(iSlaveNo, FrameType, &bPause, SendDataLen, SendBuffer, &SendLen);
     FAS_Send(nPortNo, SendBuffer, SendLen);
     free(SendBuffer);
 
 
-    FAS_Receive(nPortNo, RcvBuffer, &RcvDataLen);
-    return FMM_OK;
+    ComStatus = FAS_Receive(nPortNo, RcvBuffer,&RcvLen);
+	ComStatus = FAS_UnPackData(RcvBuffer, RcvLen, iSlaveNo, SyncByte, FrameType, RespData, &RespDataLen);
+	if(ComStatus != FMM_OK) return ComStatus;
+
+	if(RespDataLen != RcvDataLen)
+	{
+		free(RcvBuffer);
+		free(RespData);
+		return FMM_UNKNOWN_ERROR;
+	}
+
+	ComStatus = RespData[0];
+	free(RcvBuffer);
+	free(RespData);
+	return ComStatus;
 }
 
 int FAS_MoveOriginSingleAxis(uint8_t nPortNo, uint8_t iSlaveNo)
@@ -55,25 +111,49 @@ int FAS_MoveOriginSingleAxis(uint8_t nPortNo, uint8_t iSlaveNo)
     const uint8_t FrameType = 0x33;
     const uint8_t SendDataLen = 0;
     const uint8_t RcvDataLen = 1;
+    uint8_t ComStatus;
+
     uint8_t* SendBuffer = (uint8_t*)calloc(15 + SendDataLen, 1);
     uint8_t SendLen;
-    uint8_t* RcvBuffer = (uint8_t*)calloc(15 + SendDataLen, 1);
+    uint8_t* RcvBuffer = (uint8_t*)calloc(15 + RcvDataLen, 1);
+    uint8_t RcvLen;
+    uint8_t* RespData = (uint8_t*)calloc(RcvDataLen + 2, 1);
+	uint8_t RespDataLen;
+
     uint8_t SyncByte = FAS_PackData(iSlaveNo, FrameType, NULL, 0, SendBuffer, &SendLen);
     FAS_Send(nPortNo, SendBuffer, SendLen);
     free(SendBuffer);
 
 
-    FAS_Receive(nPortNo, RcvBuffer, &RcvDataLen);
-    return FMM_OK;
+    ComStatus = FAS_Receive(nPortNo, RcvBuffer,&RcvLen);
+	ComStatus = FAS_UnPackData(RcvBuffer, RcvLen, iSlaveNo, SyncByte, FrameType, RespData, &RespDataLen);
+	if(ComStatus != FMM_OK) return ComStatus;
+
+	if(RespDataLen != RcvDataLen)
+	{
+		free(RcvBuffer);
+		free(RespData);
+		return FMM_UNKNOWN_ERROR;
+	}
+
+	ComStatus = RespData[0];
+	free(RcvBuffer);
+	free(RespData);
+	return ComStatus;
 }
 int FAS_MoveSingleAxisAbsPos(uint8_t nPortNo, uint8_t iSlaveNo, int32_t lAbsPos, uint32_t lVelocity)
 {
     const uint8_t FrameType = 0x34;
     const uint8_t SendDataLen = 8;
     const uint8_t RcvDataLen = 1;
+    uint8_t ComStatus;
+
     uint8_t* SendBuffer = (uint8_t*)calloc(15 + 2*SendDataLen, 1);
     uint8_t SendLen;
-    uint8_t* RcvBuffer = (uint8_t*)calloc(15 + SendDataLen, 1);
+    uint8_t* RcvBuffer = (uint8_t*)calloc(15 + RcvDataLen, 1);
+    uint8_t RcvLen;
+    uint8_t* RespData = (uint8_t*)calloc(RcvDataLen + 2, 1);
+	uint8_t RespDataLen;
 
     uint8_t* Data = (uint8_t*)calloc(SendDataLen, 1);
     memcpy(Data, &lAbsPos, 4);
@@ -83,17 +163,35 @@ int FAS_MoveSingleAxisAbsPos(uint8_t nPortNo, uint8_t iSlaveNo, int32_t lAbsPos,
     free(SendBuffer);
 
 
-    FAS_Receive(nPortNo, RcvBuffer, &RcvDataLen);
-    return FMM_OK;
+    ComStatus = FAS_Receive(nPortNo, RcvBuffer,&RcvLen);
+	ComStatus = FAS_UnPackData(RcvBuffer, RcvLen, iSlaveNo, SyncByte, FrameType, RespData, &RespDataLen);
+	if(ComStatus != FMM_OK) return ComStatus;
+
+	if(RespDataLen != RcvDataLen)
+	{
+		free(RcvBuffer);
+		free(RespData);
+		return FMM_UNKNOWN_ERROR;
+	}
+
+	ComStatus = RespData[0];
+	free(RcvBuffer);
+	free(RespData);
+	return ComStatus;
 }
 int FAS_MoveSingleAxisIncPos(uint8_t nPortNo, uint8_t iSlaveNo, int32_t lIncPos, uint32_t lVelocity)
 {
     const uint8_t FrameType = 0x35;
     const uint8_t SendDataLen = 8;
     const uint8_t RcvDataLen = 1;
+    uint8_t ComStatus;
+    uint8_t* RespData = (uint8_t*)calloc(RcvDataLen + 2, 1);
+	uint8_t RespDataLen;
+
     uint8_t* SendBuffer = (uint8_t*)calloc(15 + 2 * SendDataLen, 1);
     uint8_t SendLen;
-    uint8_t* RcvBuffer = (uint8_t*)calloc(15 + SendDataLen, 1);
+    uint8_t* RcvBuffer = (uint8_t*)calloc(15 + RcvDataLen, 1);
+    uint8_t RcvLen;
 
     uint8_t* Data = (uint8_t*)calloc(SendDataLen, 1);
     memcpy(Data, &lIncPos, 4);
@@ -103,17 +201,35 @@ int FAS_MoveSingleAxisIncPos(uint8_t nPortNo, uint8_t iSlaveNo, int32_t lIncPos,
     free(SendBuffer);
 
 
-    FAS_Receive(nPortNo, RcvBuffer, &RcvDataLen);
-    return FMM_OK;
+    ComStatus = FAS_Receive(nPortNo, RcvBuffer,&RcvLen);
+	ComStatus = FAS_UnPackData(RcvBuffer, RcvLen, iSlaveNo, SyncByte, FrameType, RespData, &RespDataLen);
+	if(ComStatus != FMM_OK) return ComStatus;
+
+	if(RespDataLen != RcvDataLen)
+	{
+		free(RcvBuffer);
+		free(RespData);
+		return FMM_UNKNOWN_ERROR;
+	}
+
+	ComStatus = RespData[0];
+	free(RcvBuffer);
+	free(RespData);
+	return ComStatus;
 }
 int FAS_MoveToLimit(uint8_t nPortNo, uint8_t iSlaveNo, uint32_t lVelocity, int iLimitDir)
 {
     const uint8_t FrameType = 0x36;
     const uint8_t SendDataLen = 5;
     const uint8_t RcvDataLen = 1;
+    uint8_t ComStatus;
+
     uint8_t* SendBuffer = (uint8_t*)calloc(15 + 2 * SendDataLen, 1);
     uint8_t SendLen;
-    uint8_t* RcvBuffer = (uint8_t*)calloc(15 + SendDataLen, 1);
+    uint8_t* RcvBuffer = (uint8_t*)calloc(15 + RcvDataLen, 1);
+    uint8_t RcvLen;
+    uint8_t* RespData = (uint8_t*)calloc(RcvDataLen + 2, 1);
+	uint8_t RespDataLen;
 
     uint8_t* Data = (uint8_t*)calloc(SendDataLen, 1);
     memcpy(Data, &lVelocity, 4);
@@ -123,17 +239,35 @@ int FAS_MoveToLimit(uint8_t nPortNo, uint8_t iSlaveNo, uint32_t lVelocity, int i
     free(SendBuffer);
 
 
-    FAS_Receive(nPortNo, RcvBuffer, &RcvDataLen);
-    return FMM_OK;
+    ComStatus = FAS_Receive(nPortNo, RcvBuffer,&RcvLen);
+	ComStatus = FAS_UnPackData(RcvBuffer, RcvLen, iSlaveNo, SyncByte, FrameType, RespData, &RespDataLen);
+	if(ComStatus != FMM_OK) return ComStatus;
+
+	if(RespDataLen != RcvDataLen)
+	{
+		free(RcvBuffer);
+		free(RespData);
+		return FMM_UNKNOWN_ERROR;
+	}
+
+	ComStatus = RespData[0];
+	free(RcvBuffer);
+	free(RespData);
+	return ComStatus;
 }
 int FAS_MoveVelocity(uint8_t nPortNo, uint8_t iSlaveNo, uint32_t lVelocity, int iVelDir)
 {
     const uint8_t FrameType = 0x37;
     const uint8_t SendDataLen = 5;
     const uint8_t RcvDataLen = 1;
+    uint8_t ComStatus;
+
     uint8_t* SendBuffer = (uint8_t*)calloc(15 + 2 * SendDataLen, 1);
     uint8_t SendLen;
-    uint8_t* RcvBuffer = (uint8_t*)calloc(15 + SendDataLen, 1);
+    uint8_t* RcvBuffer = (uint8_t*)calloc(15 + 2*RcvDataLen, 1);
+    uint8_t RcvLen;
+    uint8_t* RespData = (uint8_t*)calloc(RcvDataLen + 2, 1);
+	uint8_t RespDataLen;
 
     uint8_t* Data = (uint8_t*)calloc(SendDataLen, 1);
     memcpy(Data, &lVelocity, 4);
@@ -143,17 +277,35 @@ int FAS_MoveVelocity(uint8_t nPortNo, uint8_t iSlaveNo, uint32_t lVelocity, int 
     free(SendBuffer);
 
 
-    FAS_Receive(nPortNo, RcvBuffer, &RcvDataLen);
-    return FMM_OK;
+    ComStatus = FAS_Receive(nPortNo, RcvBuffer,&RcvLen);
+	ComStatus = FAS_UnPackData(RcvBuffer, RcvLen, iSlaveNo, SyncByte, FrameType, RespData, &RespDataLen);
+	if(ComStatus != FMM_OK) return ComStatus;
+
+	if(RespDataLen != RcvDataLen)
+	{
+		free(RcvBuffer);
+		free(RespData);
+		return FMM_UNKNOWN_ERROR;
+	}
+
+	ComStatus = RespData[0];
+	free(RcvBuffer);
+	free(RespData);
+	return ComStatus;
 }
 int FAS_PositionAbsOverride(uint8_t nPortNo, uint8_t iSlaveNo, int32_t lOverridePos)
 {
     const uint8_t FrameType = 0x38;
     const uint8_t SendDataLen = 4;
     const uint8_t RcvDataLen = 1;
+    uint8_t ComStatus;
+
     uint8_t* SendBuffer = (uint8_t*)calloc(15 + 2 * SendDataLen, 1);
     uint8_t SendLen;
-    uint8_t* RcvBuffer = (uint8_t*)calloc(15 + SendDataLen, 1);
+    uint8_t* RcvBuffer = (uint8_t*)calloc(15 + 2*RcvDataLen, 1);
+    uint8_t RcvLen;
+    uint8_t* RespData = (uint8_t*)calloc(RcvDataLen + 2, 1);
+	uint8_t RespDataLen;
 
     uint8_t* Data = (uint8_t*)calloc(SendDataLen, 1);
     memcpy(Data, &lOverridePos, 4);
@@ -162,17 +314,35 @@ int FAS_PositionAbsOverride(uint8_t nPortNo, uint8_t iSlaveNo, int32_t lOverride
     free(SendBuffer);
 
 
-    FAS_Receive(nPortNo, RcvBuffer, &RcvDataLen);
-    return FMM_OK;
+    ComStatus = FAS_Receive(nPortNo, RcvBuffer,&RcvLen);
+	ComStatus = FAS_UnPackData(RcvBuffer, RcvLen, iSlaveNo, SyncByte, FrameType, RespData, &RespDataLen);
+	if(ComStatus != FMM_OK) return ComStatus;
+
+	if(RespDataLen != RcvDataLen)
+	{
+		free(RcvBuffer);
+		free(RespData);
+		return FMM_UNKNOWN_ERROR;
+	}
+
+	ComStatus = RespData[0];
+	free(RcvBuffer);
+	free(RespData);
+	return ComStatus;
 }
 int FAS_PositionIncOverride(uint8_t nPortNo, uint8_t iSlaveNo, int32_t lOverridePos)
 {
     const uint8_t FrameType = 0x39;
     const uint8_t SendDataLen = 4;
     const uint8_t RcvDataLen = 1;
+    uint8_t ComStatus;
+
     uint8_t* SendBuffer = (uint8_t*)calloc(15 + 2 * SendDataLen, 1);
     uint8_t SendLen;
-    uint8_t* RcvBuffer = (uint8_t*)calloc(15 + SendDataLen, 1);
+    uint8_t* RcvBuffer = (uint8_t*)calloc(15 + 2*RcvDataLen, 1);
+    uint8_t RcvLen;
+    uint8_t* RespData = (uint8_t*)calloc(RcvDataLen + 2, 1);
+	uint8_t RespDataLen;
 
     uint8_t* Data = (uint8_t*)calloc(SendDataLen, 1);
     memcpy(Data, &lOverridePos, 4);
@@ -181,17 +351,35 @@ int FAS_PositionIncOverride(uint8_t nPortNo, uint8_t iSlaveNo, int32_t lOverride
     free(SendBuffer);
 
 
-    FAS_Receive(nPortNo, RcvBuffer, &RcvDataLen);
-    return FMM_OK;
+    ComStatus = FAS_Receive(nPortNo, RcvBuffer,&RcvLen);
+	ComStatus = FAS_UnPackData(RcvBuffer, RcvLen, iSlaveNo, SyncByte, FrameType, RespData, &RespDataLen);
+	if(ComStatus != FMM_OK) return ComStatus;
+
+	if(RespDataLen != RcvDataLen)
+	{
+		free(RcvBuffer);
+		free(RespData);
+		return FMM_UNKNOWN_ERROR;
+	}
+
+	ComStatus = RespData[0];
+	free(RcvBuffer);
+	free(RespData);
+	return ComStatus;
 }
 int FAS_VelocityOverride(uint8_t nPortNo, uint8_t iSlaveNo, uint32_t lVelocity)
 {
     const uint8_t FrameType = 0x3A;
     const uint8_t SendDataLen = 4;
     const uint8_t RcvDataLen = 1;
+    uint8_t ComStatus;
+
     uint8_t* SendBuffer = (uint8_t*)calloc(15 + 2 * SendDataLen, 1);
     uint8_t SendLen;
-    uint8_t* RcvBuffer = (uint8_t*)calloc(15 + SendDataLen, 1);
+    uint8_t* RcvBuffer = (uint8_t*)calloc(15 + 2*RcvDataLen, 1);
+    uint8_t RcvLen;
+    uint8_t* RespData = (uint8_t*)calloc(RcvDataLen + 2, 1);
+	uint8_t RespDataLen;
 
     uint8_t* Data = (uint8_t*)calloc(SendDataLen, 1);
     memcpy(Data, &lVelocity, 4);
@@ -200,8 +388,21 @@ int FAS_VelocityOverride(uint8_t nPortNo, uint8_t iSlaveNo, uint32_t lVelocity)
     free(SendBuffer);
 
 
-    FAS_Receive(nPortNo, RcvBuffer, &RcvDataLen);
-    return FMM_OK;
+    ComStatus = FAS_Receive(nPortNo, RcvBuffer,&RcvLen);
+	ComStatus = FAS_UnPackData(RcvBuffer, RcvLen, iSlaveNo, SyncByte, FrameType, RespData, &RespDataLen);
+	if(ComStatus != FMM_OK) return ComStatus;
+
+	if(RespDataLen != RcvDataLen)
+	{
+		free(RcvBuffer);
+		free(RespData);
+		return FMM_UNKNOWN_ERROR;
+	}
+
+	ComStatus = RespData[0];
+	free(RcvBuffer);
+	free(RespData);
+	return ComStatus;
 }
 
 int FAS_MoveLinearAbsPos(uint8_t nPortNo, uint8_t nNoOfSlaves, uint8_t* iSlavesNo, int32_t* lAbsPos, uint32_t lFeedrate, uint16_t wAccelTime)
@@ -228,9 +429,14 @@ int FAS_MoveSingleAxisAbsPosEx(uint8_t nPortNo, uint8_t iSlaveNo, int32_t lAbsPo
     const uint8_t FrameType = 0x80;
     const uint8_t SendDataLen = 40;
     const uint8_t RcvDataLen = 1;
+    uint8_t ComStatus;
+
     uint8_t* SendBuffer = (uint8_t*)calloc(15 + 2 * SendDataLen, 1);
     uint8_t SendLen;
-    uint8_t* RcvBuffer = (uint8_t*)calloc(15 + SendDataLen, 1);
+    uint8_t* RcvBuffer = (uint8_t*)calloc(15 + 2*RcvDataLen, 1);
+    uint8_t RcvLen;
+    uint8_t* RespData = (uint8_t*)calloc(RcvDataLen + 2, 1);
+	uint8_t RespDataLen;
 
     uint8_t* Data = (uint8_t*)calloc(SendDataLen, 1);
     memcpy(Data, &lAbsPos, 4);
@@ -241,17 +447,35 @@ int FAS_MoveSingleAxisAbsPosEx(uint8_t nPortNo, uint8_t iSlaveNo, int32_t lAbsPo
     free(SendBuffer);
 
 
-    FAS_Receive(nPortNo, RcvBuffer, &RcvDataLen);
-    return FMM_OK;
+    ComStatus = FAS_Receive(nPortNo, RcvBuffer,&RcvLen);
+	ComStatus = FAS_UnPackData(RcvBuffer, RcvLen, iSlaveNo, SyncByte, FrameType, RespData, &RespDataLen);
+	if(ComStatus != FMM_OK) return ComStatus;
+
+	if(RespDataLen != RcvDataLen)
+	{
+		free(RcvBuffer);
+		free(RespData);
+		return FMM_UNKNOWN_ERROR;
+	}
+
+	ComStatus = RespData[0];
+	free(RcvBuffer);
+	free(RespData);
+	return ComStatus;
 }
 int FAS_MoveSingleAxisIncPosEx(uint8_t nPortNo, uint8_t iSlaveNo, int32_t lIncPos, uint32_t lVelocity, MOTION_OPTION_EX* lpExOption)
 {
     const uint8_t FrameType = 0x81;
     const uint8_t SendDataLen = 40;
     const uint8_t RcvDataLen = 1;
+    uint8_t ComStatus;
+
     uint8_t* SendBuffer = (uint8_t*)calloc(15 + 2 * SendDataLen, 1);
     uint8_t SendLen;
-    uint8_t* RcvBuffer = (uint8_t*)calloc(15 + SendDataLen, 1);
+    uint8_t* RcvBuffer = (uint8_t*)calloc(15 + 2*RcvDataLen, 1);
+    uint8_t RcvLen;
+    uint8_t* RespData = (uint8_t*)calloc(RcvDataLen + 2, 1);
+	uint8_t RespDataLen;
 
     uint8_t* Data = (uint8_t*)calloc(SendDataLen, 1);
     memcpy(Data, &lIncPos, 4);
@@ -262,17 +486,35 @@ int FAS_MoveSingleAxisIncPosEx(uint8_t nPortNo, uint8_t iSlaveNo, int32_t lIncPo
     free(SendBuffer);
 
 
-    FAS_Receive(nPortNo, RcvBuffer, &RcvDataLen);
-    return FMM_OK;
+    ComStatus = FAS_Receive(nPortNo, RcvBuffer,&RcvLen);
+	ComStatus = FAS_UnPackData(RcvBuffer, RcvLen, iSlaveNo, SyncByte, FrameType, RespData, &RespDataLen);
+	if(ComStatus != FMM_OK) return ComStatus;
+
+	if(RespDataLen != RcvDataLen)
+	{
+		free(RcvBuffer);
+		free(RespData);
+		return FMM_UNKNOWN_ERROR;
+	}
+
+	ComStatus = RespData[0];
+	free(RcvBuffer);
+	free(RespData);
+	return ComStatus;
 }
 int FAS_MoveVelocityEx(uint8_t nPortNo, uint8_t iSlaveNo, uint32_t lVelocity, int iVelDir, VELOCITY_OPTION_EX* lpExOption)
 {
     const uint8_t FrameType = 0x82;
     const uint8_t SendDataLen = 40;
     const uint8_t RcvDataLen = 1;
+    uint8_t ComStatus;
+
     uint8_t* SendBuffer = (uint8_t*)calloc(15 + 2 * SendDataLen, 1);
     uint8_t SendLen;
     uint8_t* RcvBuffer = (uint8_t*)calloc(15 + SendDataLen, 1);
+    uint8_t RcvLen;
+    uint8_t* RespData = (uint8_t*)calloc(RcvDataLen + 2, 1);
+	uint8_t RespDataLen;
 
     uint8_t* Data = (uint8_t*)calloc(SendDataLen, 1);
     memcpy(Data, &lVelocity, 4);
@@ -283,6 +525,19 @@ int FAS_MoveVelocityEx(uint8_t nPortNo, uint8_t iSlaveNo, uint32_t lVelocity, in
     free(SendBuffer);
 
 
-    FAS_Receive(nPortNo, RcvBuffer, &RcvDataLen);
-    return FMM_OK;
+    ComStatus = FAS_Receive(nPortNo, RcvBuffer,&RcvLen);
+	ComStatus = FAS_UnPackData(RcvBuffer, RcvLen, iSlaveNo, SyncByte, FrameType, RespData, &RespDataLen);
+	if(ComStatus != FMM_OK) return ComStatus;
+
+	if(RespDataLen != RcvDataLen)
+	{
+		free(RcvBuffer);
+		free(RespData);
+		return FMM_UNKNOWN_ERROR;
+	}
+
+	ComStatus = RespData[0];
+	free(RcvBuffer);
+	free(RespData);
+	return ComStatus;
 }
