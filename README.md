@@ -16,7 +16,7 @@ Include Library Header
 
 Implement send and receive function
 
-```
+```c
 uint8_t FAS_Send(uint8_t Port, uint8_t* SendBuffer, uint8_t Len)
 {
     /*
