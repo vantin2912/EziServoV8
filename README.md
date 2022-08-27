@@ -10,13 +10,13 @@ Unofficially C library source for Fastech Eziservo V8
 Add library to your build system
 
 Include Library Header
-'''
+```
 #include "FAS_EziMOTIONPlusR.h"
-'''
+```
 
 Implement send and receive function
 
-'''
+```
 uint8_t FAS_Send(uint8_t Port, uint8_t* SendBuffer, uint8_t Len)
 {
     /*
@@ -38,7 +38,7 @@ uint8_t FAS_Receive(uint8_t Port, uint8_t* RcvBuffer, uint8_t* RxLen)
     */
 	return FMM_OK;
 }
-'''
+```
 
 
 ## Contributing
