@@ -1,10 +1,9 @@
 #include "FAS_Port.h"
 #include <stdio.h>
-#include "main.h"
 
 
 
-__weak uint8_t FAS_Send(uint8_t Port, uint8_t* SendBuffer, uint8_t Len)
+__attribute__((weak)) uint8_t FAS_Send(uint8_t Port, uint8_t* SendBuffer, uint8_t Len)
 {
     for(uint8_t i = 0; i < Len; ++i)
     {
@@ -14,7 +13,7 @@ __weak uint8_t FAS_Send(uint8_t Port, uint8_t* SendBuffer, uint8_t Len)
 
     return 0;
 }
-__weak uint8_t FAS_Receive(uint8_t Port, uint8_t* RcvBuffer, uint8_t* RxLen)
+__attribute__((weak)) uint8_t FAS_Receive(uint8_t Port, uint8_t* RcvBuffer, uint8_t* RxLen)
 {
 
     return 0;
