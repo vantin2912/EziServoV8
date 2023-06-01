@@ -2,7 +2,7 @@
 
 
 ## Description
-Unofficially C library source for Fastech Eziservo V8
+Unofficially C library source for Fastech Eziservo V8 for microcontroller like STM32,...
 
 
 ## Installation
